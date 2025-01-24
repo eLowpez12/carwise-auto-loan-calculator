@@ -7,33 +7,27 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
-.calculator-title {
+.main-title {
     text-align: center;
-    max-width: 800px;
-    margin: 0 auto 48px;
-}
-
-.calculator-title h1 {
     font-size: 44px;
     font-weight: 600;
-    margin-bottom: 24px;
+    margin: 0 auto 24px;
     line-height: 1.2;
-}
-
-.calculator-title .text-dark {
+    max-width: 800px;
     color: #4A4A4A;
 }
 
-.calculator-title .text-red {
+.main-title .highlight-text {
     color: #E31837;
 }
 
-.calculator-title .subtitle {
+.subtitle {
+    text-align: center;
     font-size: 18px;
     line-height: 1.5;
     color: #6B7280;
     max-width: 700px;
-    margin: 0 auto;
+    margin: 0 auto 48px;
 }
 
 * {
@@ -60,31 +54,28 @@ body {
 
 .calculator-wrapper::before {
     content: '';
-    position: absolute;
-    top: -200px;
-    right: -400px;
-    width: 800px;
-    height: 800px;
-    background-image: url('car-wise-car.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    position: fixed;
+    right: -200px;
+    top: -100px;
+    width: 1000px;
+    height: 1000px;
+    background: url('car-wise-car.svg') no-repeat right top / 1000px;
     opacity: 0.03;
+    z-index: -1;
     pointer-events: none;
 }
 
-.calculator-wrapper::after {
+body::before {
     content: '';
-    position: absolute;
-    left: -150px;
-    bottom: -100px;
-    width: 400px;
-    height: 400px;
-    background-image: url('left-car-wise-watermark.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.03;
+    position: fixed;
+    left: calc(50% - 1000px);
+    top: 50%;
+    width: 800px;
+    height: 2000px;
+    background: url('Left-car-wise-watermark.svg') no-repeat center center / contain;
+    transform: translateY(-50%) rotate(-90deg);
+    opacity: 0.06;
+    z-index: -1;
     pointer-events: none;
 }
 
@@ -584,19 +575,21 @@ body {
 }
 
 .cta-button {
+    display: inline-block;  /* Add this to make the button work as a link */
     background-color: #E31837;
     color: white;
     border: none;
-    padding: 8px 32px;   /* Slightly reduce vertical padding */
+    padding: 8px 32px;
     border-radius: 6px;
-    font-weight: 600;   /* Back to original weight */
-    font-size: 16px;    /* Back to original size */
+    font-weight: 600;
+    font-size: 16px;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(227, 24, 55, 0.2);
-    min-width: 240px;   /* Keep existing width */
-    white-space: normal;  /* Allow text to wrap */
-    line-height: 1.2;    /* Adjust line spacing */
+    min-width: 240px;
+    white-space: normal;
+    line-height: 1.2;
+    text-decoration: none;  /* Remove underline from link */
 }
 
 .cta-button:hover {
