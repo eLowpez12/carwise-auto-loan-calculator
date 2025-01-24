@@ -1,0 +1,684 @@
+:root {
+    --primary-blue: #3B82F6;
+    --text-dark: #374151;
+    --text-gray: #6B7280;
+    --border-color: #E5E7EB;
+    --background-white: #FFFFFF;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+.calculator-title {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 48px;
+}
+
+.calculator-title h1 {
+    font-size: 44px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    line-height: 1.2;
+}
+
+.calculator-title .text-dark {
+    color: #4A4A4A;
+}
+
+.calculator-title .text-red {
+    color: #E31837;
+}
+
+.calculator-title .subtitle {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #6B7280;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    background-color: #F9FAFB;
+    min-height: 100vh;
+    display: block;
+    padding: 20px;
+    color: var(--text-dark);
+}
+
+.calculator-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.calculator-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -400px;
+    width: 800px;
+    height: 800px;
+    background-image: url('car-wise-car.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.03;
+    pointer-events: none;
+}
+
+.calculator-wrapper::after {
+    content: '';
+    position: absolute;
+    left: -150px;
+    bottom: -100px;
+    width: 400px;
+    height: 400px;
+    background-image: url('left-car-wise-watermark.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.03;
+    pointer-events: none;
+}
+
+.calculator-container {
+    background: var(--background-white);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding: 32px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.calculator-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Input Styles */
+.input-group {
+    margin-bottom: 24px;
+}
+
+.input-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    max-width: 160px;
+}
+
+.currency-symbol,
+.percentage-symbol {
+    position: absolute;
+    color: #6B7280;
+    font-size: 15px;
+    left: 12px;
+}
+
+.input-wrapper input,
+.dropdown-select {
+    box-shadow: none;
+}
+
+.input-wrapper input,
+.select-selected {
+    box-shadow: none;
+    height: 40px;
+    padding: 0 20px;
+    font-size: 17px;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    background-color: #F9FAFB;
+    color: #111827;
+    outline: none;
+    width: 100%;
+    transition: all 0.15s ease;
+}
+
+.input-wrapper input::placeholder {
+    color: #6B7280;
+    font-size: 16px;
+}
+
+.term-wrapper input {
+    padding-right: 80px;
+}
+
+.input-wrapper input:focus,
+.select-selected:focus {
+    border-color: #E31837;
+    box-shadow: 0 0 0 2px rgba(227, 24, 55, 0.1);
+}
+
+.input-wrapper input:hover,
+.dropdown-select:hover {
+    border-color: #D1D5DB;
+}
+
+.tooltip-icon {
+    margin-left: 8px;
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #666;
+    font-size: 11px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-style: normal;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 400;
+}
+
+.tooltip-icon:hover {
+    background-color: #f5f5f5;
+    color: #E31837;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    background: white;
+    border-radius: 4px;
+    padding: 10px 14px;
+    min-width: 250px;
+    max-width: 450px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 13px;
+    color: #333;
+    z-index: 3;
+    animation: fadeIn 0.2s ease-in-out;
+    left: 30px;
+    bottom: calc(100% + 8px);
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.tooltip.show {
+    display: block;
+}
+
+.tooltip::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    bottom: -6px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Results Section */
+.results-section {
+    text-align: center;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.results-section h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #111827;
+}
+
+.payment-amount {
+    font-size: 64px;
+    font-weight: 700;
+    margin-bottom: 32px;
+}
+
+.payment-details {
+    margin-bottom: 32px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-dark);
+}
+
+.compare-rates-btn {
+    width: 100%;
+    padding: 8px 12px;  /* Smaller padding */
+    background-color: #E31837;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 400;   /* Remove bold */
+    font-size: 16px;    /* Smaller font */
+    cursor: pointer;
+    margin-bottom: 16px;
+    height: 36px;       /* Smaller height */
+    transition: background-color 0.2s ease;
+}
+
+.compare-rates-btn:hover {
+    background-color: #cc1631;
+}
+
+.amortization-link {
+    color: #E31837;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.amortization-link:hover {
+    text-decoration: underline;
+}
+
+/* Dropdown styles from OTD calculator */
+.dropdown-select,
+.dropdown-select:focus,
+.dropdown-select option,
+.dropdown-select::-ms-expand,
+.dropdown-select optgroup {
+    /* Remove these styles */
+}
+
+/* Keep only these dropdown-related styles */
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.select-selected {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    padding: 0 20px;
+    text-align: left;
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #6B7280;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.select-selected.active {
+    border-color: #E31837;
+    box-shadow: 0 0 0 3px rgba(227, 24, 55, 0.1);
+}
+
+.select-items {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    background: linear-gradient(180deg, #F9FAFB 0%, #F3F4F6 100%);
+    border: 1px solid #E5E7EB;
+    border-right: 2px solid rgba(227, 24, 55, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 8px 0;
+    z-index: 50;
+}
+
+.select-items div {
+    padding: 16px 20px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #4B5563;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.select-items div:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.select-items div.selected {
+    color: #111827;
+    font-weight: 400;
+}
+
+.select-items div.selected::before {
+    content: "✓";
+    margin-right: 12px;
+    color: #111827;
+}
+
+.dropdown-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #6B7280;
+    transition: transform 0.15s ease;
+}
+
+.select-hide {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .calculator-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+/* Add styles for the placeholder dashes */
+.payment-amount .amount:empty::before,
+.payment-amount .amount:only-child {
+    content: "--";
+    color: #9CA3AF;  /* Same color as input placeholders */
+}
+
+.detail-row .value:empty::before,
+.detail-row .value:only-child {
+    content: "--";
+    color: #9CA3AF;
+}
+
+/* Remove old amortization styles and add these */
+.details-container {
+    background: var(--background-white);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    margin: 16px auto;
+    overflow: hidden;
+}
+
+.details-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid #E5E7EB;
+    background-color: white;
+}
+
+.header-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;  /* Center the content */
+    gap: 24px;
+    position: relative;  /* For absolute positioning of logo */
+}
+
+.details-logo {
+    position: absolute;  /* Take logo out of flow */
+    left: 0;            /* Align to left edge */
+    height: 32px;
+    width: auto;
+}
+
+.details-header h2 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #111827;
+    margin: 0;
+    /* Title will be centered in remaining space */
+}
+
+/* Update table styles */
+.amortization-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.amortization-table th,
+.amortization-table td {
+    padding: 8px 16px;
+    text-align: right;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.amortization-table th {
+    background-color: #F9FAFB;  /* Light gray background */
+    color: #E31837;  /* CarWise red */
+    font-weight: 500;
+    font-size: 11px;
+    text-align: left;
+    letter-spacing: 0.05em;
+}
+
+.amortization-table th:not(:first-child),
+.amortization-table td:not(:first-child) {
+    text-align: right;
+}
+
+.amortization-table td {
+    color: #111827;
+    font-size: 14px;
+}
+
+/* Add padding to table cells instead */
+.amortization-table td {
+    padding: 8px 32px;
+    color: #111827;
+    font-size: 14px;
+}
+
+.amortization-table th {
+    padding: 8px 32px;
+    background-color: #F9FAFB;
+    color: #E31837;
+    font-weight: 600;  /* Make bolder */
+    font-size: 12px;   /* Slightly larger */
+    letter-spacing: 0.05em;
+}
+
+/* Update alignment for each column */
+.amortization-table th,
+.amortization-table td {
+    text-align: right;  /* Default right alignment */
+}
+
+.amortization-table th:first-child,
+.amortization-table td:first-child {
+    text-align: left;  /* Left align only Month column */
+}
+
+/* Remove the old alignment rules */
+.amortization-table th:not(:first-child),
+.amortization-table td:not(:first-child) {
+    /* Remove this rule */
+}
+
+.date-input {
+    padding: 0 16px !important;
+    color: #111827;
+    height: 40px;  /* Back to original smaller height */
+    width: 160px !important;  /* Half of the max-width: 320px that other inputs use */
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.date-input::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+.payoff-date {
+    margin-top: 24px;  /* Increase margin */
+}
+
+.payoff-date h3 {
+    font-size: 14px;   /* Smaller text */
+    font-weight: 400;  /* Less bold */
+    color: #111827;    /* Change from gray to black */
+    margin-bottom: 4px;  /* Less space */
+}
+
+.payoff-value {
+    font-size: 28px;   /* Larger text */
+    font-weight: 700;  /* Bolder */
+    color: #111827;
+}
+
+/* Just keep the zebra striping */
+.amortization-table tr:nth-child(even) td {
+    background-color: #F9FAFB;  /* Same light gray as header */
+}
+
+.calculator-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.print-button {
+    background-color: #4A4A4A;  /* Change from #4B5563 to match OTD */
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    min-width: 80px;
+}
+
+.print-button:hover {
+    background-color: #404040;  /* Slightly darker on hover */
+}
+
+.cta-button {
+    background-color: #E31837;
+    color: white;
+    border: none;
+    padding: 8px 32px;   /* Slightly reduce vertical padding */
+    border-radius: 6px;
+    font-weight: 600;   /* Back to original weight */
+    font-size: 16px;    /* Back to original size */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(227, 24, 55, 0.2);
+    min-width: 240px;   /* Keep existing width */
+    white-space: normal;  /* Allow text to wrap */
+    line-height: 1.2;    /* Adjust line spacing */
+}
+
+.cta-button:hover {
+    background-color: #f91d3d;  /* Brighter red */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(227, 24, 55, 0.25);
+}
+
+/* Update input styles */
+#interest-rate {
+    height: 40px;
+    padding: 0 24px 0 16px;
+}
+
+/* Update results section text colors */
+.detail-row span:first-child {
+    color: #111827;  /* Change to black */
+}
+
+/* Add print styles */
+@media print {
+    /* Hide everything by default */
+    body * {
+        visibility: hidden;
+    }
+
+    /* Only show the amortization section */
+    .amortization-section,
+    .amortization-section * {
+        visibility: visible;
+    }
+
+    /* Hide the print and CTA buttons in the schedule */
+    .calculator-actions {
+        display: none;
+    }
+
+    /* Position the schedule at the top of the printed page */
+    .amortization-section {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    /* Remove shadows and adjust colors for better printing */
+    .details-container {
+        box-shadow: none;
+        border: none;
+    }
+
+    /* Ensure table lines print clearly */
+    .amortization-table th,
+    .amortization-table td {
+        border-color: #000;
+    }
+
+    /* Hide the calculator container */
+    .calculator-container {
+        display: none;
+    }
+}
+
+/* Add active state for when tooltip is shown */
+.tooltip-icon.active {
+    background-color: #f5f5f5;
+    color: #E31837;
+}
+
+/* Update loan amount input */
+#loan-amount {
+    height: 40px;
+    padding: 0 16px 0 24px;
+}
+
+/* Add consistent focus state for all inputs */
+.input-wrapper input:focus {
+    border-color: #E31837;
+    box-shadow: 0 0 0 3px rgba(227, 24, 55, 0.1);
+}
+
+/* Add hover state */
+.input-wrapper input:hover {
+    border-color: #D1D5DB;
+} 

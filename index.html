@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarWise Loan Calculator</title>
+    <!-- Add normalize.css for consistent styling across browsers -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <!-- Your custom styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculator-title">
+        <h1>
+            <span class="text-dark">What's Your</span>
+            <span class="text-red">Auto Loan Payment</span>
+            <span class="text-dark">?</span>
+        </h1>
+        <p class="subtitle">
+            Plan your car financing with confidence by understanding your monthly payments, total costs, and complete payment schedule.
+        </p>
+    </div>
+    <!-- Add wrapper div around calculator -->
+    <div class="calculator-wrapper">
+        <div class="calculator-container">
+            <!-- Left Column - Inputs -->
+            <div class="calculator-grid">
+                <div class="input-section">
+                    <div class="input-group">
+                        <label>
+                            How much are you looking to borrow?
+                            <div class="tooltip-icon">
+                                i
+                                <div class="tooltip">Enter the total amount you wish to borrow for your vehicle.</div>
+                            </div>
+                        </label>
+                        <div class="input-wrapper">
+                            <input type="text" id="loan-amount" placeholder="Enter amount">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>
+                            For how long?
+                            <div class="tooltip-icon">
+                                i
+                                <div class="tooltip">Enter the length of your loan term in months.</div>
+                            </div>
+                        </label>
+                        <div class="input-wrapper term-wrapper">
+                            <div class="custom-select">
+                                <div class="select-selected">
+                                    Select term
+                                    <div class="dropdown-arrow">
+                                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
+                                            <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="select-items select-hide">
+                                    <div data-value="">Select term</div>
+                                    <div data-value="36">36 months</div>
+                                    <div data-value="48">48 months</div>
+                                    <div data-value="60">60 months</div>
+                                    <div data-value="72">72 months</div>
+                                    <div data-value="84">84 months</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Interest rate</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="interest-rate" placeholder="Enter rate">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>
+                            Start Date
+                            <div class="tooltip-icon">
+                                i
+                                <div class="tooltip">Enter when you want your loan to start.</div>
+                            </div>
+                        </label>
+                        <div class="input-wrapper">
+                            <input type="date" id="start-date" class="date-input">
+                        </div>
+                    </div>
+
+                    <!-- Add this after the Start Date input group -->
+                    <div class="payoff-date">
+                        <h3>Estimated Payoff Date</h3>
+                        <div class="payoff-value">--</div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Results -->
+                <div class="results-section">
+                    <h2>Your estimated monthly payment</h2>
+                    <div class="payment-amount">
+                        <span class="amount">--</span>
+                    </div>
+
+                    <div class="payment-details">
+                        <div class="detail-row">
+                            <span>Total Principal Paid</span>
+                            <span class="value">--</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Total Interest Paid</span>
+                            <span class="value">--</span>
+                        </div>
+                    </div>
+
+                    <button class="compare-rates-btn">Calculate Total</button>
+                    <a href="#" class="amortization-link">See amortization schedule</a>
+                    <div class="calculator-actions">
+                        <button class="print-button">Print</button>
+                        <button class="cta-button">
+                            Save Time & Money<br>with CarWise
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add defer to ensure DOM is loaded before script runs -->
+    <script src="calculator.js" defer></script>
+    <!-- Add this after calculator-container but initially hidden -->
+    <div class="details-container amortization-section" style="display: none;">
+        <div class="details-header">
+            <div class="header-content">
+                <img src="car-wise-calculator-logo.svg" alt="CarWise Calculator" class="details-logo">
+                <h2>Amortization Schedule</h2>
+            </div>
+        </div>
+        <div class="details-content">
+            <table class="amortization-table">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Payment</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody id="amortization-table-body">
+                    <!-- Table rows will be added here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html> 
