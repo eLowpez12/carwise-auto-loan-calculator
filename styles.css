@@ -8,26 +8,27 @@
 }
 
 .main-title {
+    font-size: 2.5rem;
     text-align: center;
-    font-size: 44px;
-    font-weight: 600;
-    margin: 0 auto 24px;
+    color: #444444;
+    margin: 40px 0;
     line-height: 1.2;
-    max-width: 800px;
-    color: #4A4A4A;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
 .main-title .highlight-text {
     color: #E31837;
+    font-weight: 800;
 }
 
 .subtitle {
     text-align: center;
-    font-size: 18px;
+    color: #666;
+    font-size: 1.1rem;
+    margin: -30px auto 40px;
+    max-width: 600px;
     line-height: 1.5;
-    color: #6B7280;
-    max-width: 700px;
-    margin: 0 auto 48px;
 }
 
 * {
@@ -168,6 +169,10 @@ body::before {
 }
 
 .tooltip-icon {
+    display: none;
+}
+
+.help-icon {
     margin-left: 8px;
     width: 20px;
     height: 20px;
@@ -177,7 +182,6 @@ body::before {
     cursor: pointer;
     color: #666;
     font-size: 11px;
-    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -185,9 +189,10 @@ body::before {
     font-style: normal;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-weight: 400;
+    position: relative;
 }
 
-.tooltip-icon:hover {
+.help-icon:hover {
     background-color: #f5f5f5;
     color: #E31837;
 }
@@ -198,8 +203,8 @@ body::before {
     background: white;
     border-radius: 4px;
     padding: 10px 14px;
-    min-width: 250px;
-    max-width: 450px;
+    min-width: 200px;
+    max-width: 250px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     font-size: 13px;
     color: #333;
@@ -208,7 +213,7 @@ body::before {
     left: 30px;
     bottom: calc(100% + 8px);
     line-height: 1.4;
-    white-space: nowrap;
+    white-space: normal;
 }
 
 .tooltip.show {
@@ -390,6 +395,17 @@ body::before {
     .calculator-grid {
         grid-template-columns: 1fr;
         gap: 32px;
+    }
+    
+    .main-title {
+        font-size: 2rem;
+        margin: 30px 0;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+        margin: -20px auto 30px;
+        padding: 0 20px;
     }
 }
 
@@ -622,9 +638,48 @@ body::before {
         visibility: visible;
     }
 
+    /* Show payment summary */
+    .payment-summary {
+        display: block !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        background-color: white;
+    }
+
+    /* Fix table formatting */
+    .details-content {
+        display: block !important;
+    }
+
+    .amortization-table {
+        display: table !important;
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+
+    .amortization-table thead {
+        display: table-header-group !important;
+    }
+
+    .amortization-table tbody {
+        display: table-row-group !important;
+    }
+    
+    .amortization-table tr {
+        display: table-row !important;
+        page-break-inside: avoid;
+    }
+    
+    .amortization-table th,
+    .amortization-table td {
+        display: table-cell !important;
+        padding: 8px 32px !important;
+        border-bottom: 1px solid #000 !important;
+    }
+
     /* Hide the print and CTA buttons in the schedule */
     .calculator-actions {
-        display: none;
+        display: none !important;
     }
 
     /* Position the schedule at the top of the printed page */
@@ -633,23 +688,24 @@ body::before {
         left: 0;
         top: 0;
         width: 100%;
+        display: block !important;
     }
 
     /* Remove shadows and adjust colors for better printing */
     .details-container {
         box-shadow: none;
         border: none;
-    }
-
-    /* Ensure table lines print clearly */
-    .amortization-table th,
-    .amortization-table td {
-        border-color: #000;
+        margin: 0;
+        padding: 0;
     }
 
     /* Hide the calculator container */
     .calculator-container {
-        display: none;
+        display: none !important;
+    }
+
+    .summary-divider {
+        background-color: #E5E7EB;
     }
 }
 
@@ -674,4 +730,217 @@ body::before {
 /* Add hover state */
 .input-wrapper input:hover {
     border-color: #D1D5DB;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.form-group select {
+    width: 100%;
+    max-width: 160px;
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    background-color: #F9FAFB;
+    color: #111827;
+    font-size: 15px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #E31837;
+    box-shadow: 0 0 0 3px rgba(227, 24, 55, 0.1);
+}
+
+.form-group select:hover {
+    border-color: #D1D5DB;
+}
+
+.help-icon {
+    margin-left: 8px;
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #666;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-style: normal;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 400;
+    position: relative;
+}
+
+.help-icon:hover {
+    background-color: #f5f5f5;
+    color: #E31837;
+}
+
+/* Remove old dropdown styles */
+.custom-select,
+.select-selected,
+.select-items,
+.dropdown-arrow,
+.select-hide {
+    /* Remove these styles */
+}
+
+/* Preloader Styles */
+.preloader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.preloader-overlay.show {
+    display: flex;
+}
+
+.preloader-container {
+    text-align: center;
+}
+
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.logo-container img {
+    max-width: 300px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.preloader-container .logo-container img {
+    max-width: 500px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.dot-loading {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.dot {
+    width: 20px;
+    height: 20px;
+    background-color: #E31837;
+    border-radius: 50%;
+    animation: bounce 0.5s ease-in-out infinite;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+.disclaimer {
+    margin-top: 30px;
+    color: #666;
+    font-size: 12px;
+    font-style: italic;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.payment-summary {
+    padding: 24px 32px;
+    border-bottom: 1px solid #E5E7EB;
+    background-color: #F9FAFB;
+    display: none;
+}
+
+.summary-section {
+    margin: 8px 0;
+}
+
+.summary-divider {
+    height: 1px;
+    background-color: #E5E7EB;
+    margin: 16px 0;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 16px;
+    color: #111827;
+}
+
+.summary-row .label {
+    font-weight: 500;
+}
+
+.summary-row .value {
+    font-weight: 600;
+    color: #E31837;
 } 

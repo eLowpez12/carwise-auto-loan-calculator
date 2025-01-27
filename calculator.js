@@ -106,35 +106,105 @@ const formatPayoffDate = (date) => {
     });
 };
 
+// Add state management
+let isCalculating = false;
+
+// Add utility function for delay
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+// Show/Hide Preloader Functions
+function showPreloader() {
+    const preloader = document.getElementById('preloader');
+    preloader.classList.add('show');
+}
+
+function hidePreloader() {
+    const preloader = document.getElementById('preloader');
+    preloader.classList.remove('show');
+}
+
 // Update calculations
-const updateCalculations = () => {
-    const selectedValue = document.querySelector('.custom-select').getAttribute('data-value');
-    const principal = parseFloat(loanAmountInput.value.replace(/[^\d.]/g, '')) || 0;
-    const term = parseFloat(selectedValue) || 0;
-    const rate = parseFloat(interestRateInput.value) || 0;
-    const startDate = document.getElementById('start-date').value;
+const updateCalculations = async () => {
+    if (isCalculating) return;
+    isCalculating = true;
+    showPreloader();
 
-    // Get the display elements
-    const monthlyPayment = document.querySelector('.payment-amount .amount');
-    const totalPrincipal = document.querySelector('.detail-row:nth-child(1) .value');
-    const totalInterest = document.querySelector('.detail-row:nth-child(2) .value');
-    const payoffValue = document.querySelector('.payoff-value');
+    try {
+        const selectedValue = document.getElementById('loanTerm').value;
+        const principal = parseFloat(loanAmountInput.value.replace(/[^\d.]/g, '')) || 0;
+        const term = parseFloat(selectedValue) || 0;
+        const rate = parseFloat(interestRateInput.value) || 0;
+        const startDate = document.getElementById('start-date').value;
 
-    if (principal > 0 && term > 0 && rate > 0 && startDate) {
-        // Calculate the full schedule once
-        const schedule = calculateAmortizationSchedule(principal, rate, term, startDate);
-        const lastPayment = schedule[schedule.length - 1];
-        
-        // Use the schedule data for all displays
-        monthlyPayment.textContent = `$${formatCurrency(schedule[0].payment)}`;
-        totalPrincipal.textContent = `$${formatCurrency(principal)}`;
-        totalInterest.textContent = `$${formatCurrency(schedule.reduce((sum, payment) => sum + payment.interest, 0))}`;
-        payoffValue.textContent = formatPayoffDate(lastPayment.date);
-    } else {
-        monthlyPayment.textContent = '--';
-        totalPrincipal.textContent = '--';
-        totalInterest.textContent = '--';
-        payoffValue.textContent = '--';
+        // Get the display elements
+        const monthlyPayment = document.querySelector('.payment-amount .amount');
+        const totalPrincipal = document.querySelector('.detail-row:nth-child(1) .value');
+        const totalInterest = document.querySelector('.detail-row:nth-child(2) .value');
+        const payoffValue = document.querySelector('.payoff-value');
+
+        if (principal > 0 && term > 0 && rate > 0 && startDate) {
+            // Calculate the full schedule once
+            const schedule = calculateAmortizationSchedule(principal, rate, term, startDate);
+            const lastPayment = schedule[schedule.length - 1];
+            const totalInterestPaid = schedule.reduce((sum, payment) => sum + payment.interest, 0);
+            
+            // Create a minimum delay
+            await delay(1000);
+            
+            // Use the schedule data for all displays
+            monthlyPayment.textContent = `$${formatCurrency(schedule[0].payment)}`;
+            totalPrincipal.textContent = `$${formatCurrency(principal)}`;
+            totalInterest.textContent = `$${formatCurrency(totalInterestPaid)}`;
+            document.querySelector('.detail-row .total-amount').textContent = `$${formatCurrency(principal + totalInterestPaid)}`;
+            payoffValue.textContent = formatPayoffDate(lastPayment.date);
+
+            // Populate amortization data for printing
+            document.querySelector('.loan-amount-value').textContent = `$${formatCurrency(principal)}`;
+            document.querySelector('.loan-term-value').textContent = `${term} months`;
+            document.querySelector('.interest-rate-value').textContent = `${rate}%`;
+            document.querySelector('.start-date-value').textContent = formatDate(startDate);
+            document.querySelector('.payment-summary .payment-value').textContent = `$${formatCurrency(schedule[0].payment)}`;
+            document.querySelector('.payment-summary .principal-value').textContent = `$${formatCurrency(principal)}`;
+            document.querySelector('.payment-summary .interest-value').textContent = `$${formatCurrency(totalInterestPaid)}`;
+            document.querySelector('.payment-summary .total-paid-value').textContent = `$${formatCurrency(principal + totalInterestPaid)}`;
+
+            // Populate the table
+            const tableBody = document.getElementById('amortization-table-body');
+            tableBody.innerHTML = '';
+            schedule.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${formatDate(row.date)}</td>
+                    <td>$${formatCurrency(row.payment)}</td>
+                    <td>$${formatCurrency(row.principal)}</td>
+                    <td>$${formatCurrency(row.interest)}</td>
+                    <td>$${formatCurrency(row.balance)}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        } else {
+            monthlyPayment.textContent = '--';
+            totalPrincipal.textContent = '--';
+            totalInterest.textContent = '--';
+            document.querySelector('.detail-row .total-amount').textContent = '--';
+            payoffValue.textContent = '--';
+
+            // Clear amortization data
+            document.querySelector('.loan-amount-value').textContent = '--';
+            document.querySelector('.loan-term-value').textContent = '--';
+            document.querySelector('.interest-rate-value').textContent = '--';
+            document.querySelector('.start-date-value').textContent = '--';
+            document.querySelector('.payment-summary .payment-value').textContent = '--';
+            document.querySelector('.payment-summary .principal-value').textContent = '--';
+            document.querySelector('.payment-summary .interest-value').textContent = '--';
+            document.querySelector('.payment-summary .total-paid-value').textContent = '--';
+            document.getElementById('amortization-table-body').innerHTML = '';
+        }
+    } catch (error) {
+        console.error('Error in calculations:', error);
+    } finally {
+        hidePreloader();
+        isCalculating = false;
     }
 };
 
@@ -205,172 +275,47 @@ const validateMaxValue = (input) => {
     }
 };
 
-// Add tooltip functionality for info icons
-const infoIcons = document.querySelectorAll('.info-icon');
-const tooltipTexts = {
-    'loan-amount': 'Enter the total amount you wish to borrow',
-    'interest-rate': 'Enter the annual interest rate'
-};
-
-infoIcons.forEach(icon => {
-    const input = icon.parentElement.getAttribute('for');
-    if (tooltipTexts[input]) {
-        icon.title = tooltipTexts[input];
-    }
-});
-
-// Update tooltip handlers
-document.querySelectorAll('.tooltip-icon').forEach(icon => {
-    // Remove mouseover/mouseleave listeners
-    icon.removeEventListener('mouseover', () => {});
-    icon.removeEventListener('mouseleave', () => {});
-
-    // Add click listener
+// Add help icon tooltip functionality
+document.querySelectorAll('.help-icon').forEach(icon => {
+    const tooltip = icon.getAttribute('data-tooltip');
+    
     icon.addEventListener('click', (e) => {
-        e.stopPropagation();  // Prevent click from bubbling
-        const tooltip = e.currentTarget.querySelector('.tooltip');
-        const allTooltips = document.querySelectorAll('.tooltip');
-        const allIcons = document.querySelectorAll('.tooltip-icon');
-        
-        // Hide all other tooltips first
-        allTooltips.forEach(t => t.classList.remove('show'));
-        allIcons.forEach(i => i.classList.remove('active'));
-        
-        // Toggle current tooltip
-        if (tooltip) {
-            tooltip.classList.toggle('show');
-            icon.classList.toggle('active');
+        e.stopPropagation();
+        const existingTooltip = document.querySelector('.tooltip.show');
+        if (existingTooltip) {
+            existingTooltip.remove();
         }
-    });
-
-    // Close tooltip when clicking outside
-    document.addEventListener('click', () => {
-        const allTooltips = document.querySelectorAll('.tooltip');
-        const allIcons = document.querySelectorAll('.tooltip-icon');
-        allTooltips.forEach(t => t.classList.remove('show'));
-        allIcons.forEach(i => i.classList.remove('active'));
+        
+        const tooltipElement = document.createElement('div');
+        tooltipElement.className = 'tooltip show';
+        tooltipElement.textContent = tooltip;
+        icon.appendChild(tooltipElement);
     });
 });
 
-// Update the dropdown functionality
+document.addEventListener('click', () => {
+    const tooltips = document.querySelectorAll('.tooltip.show');
+    tooltips.forEach(tooltip => tooltip.remove());
+});
+
+// Set default date to today when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    const customSelect = document.querySelector('.custom-select');
-    const selectSelected = customSelect.querySelector('.select-selected');
-    const selectItems = customSelect.querySelector('.select-items');
-    const dropdownArrow = selectSelected.querySelector('.dropdown-arrow');
-
-    // Toggle dropdown
-    selectSelected.addEventListener('click', function(e) {
-        e.stopPropagation();
-        selectItems.classList.toggle('select-hide');
-        selectSelected.classList.toggle('active');
-        const isHidden = selectItems.classList.contains('select-hide');
-        dropdownArrow.style.transform = isHidden ? 
-            'translateY(-50%)' : 'translateY(-50%) rotate(180deg)';
-    });
-
-    // Handle option selection
-    selectItems.querySelectorAll('div').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const value = this.getAttribute('data-value');
-            
-            // Skip if clicking the "Select term" option
-            if (!value) return;
-            
-            // Remove selected class from all items
-            selectItems.querySelectorAll('div').forEach(div => div.classList.remove('selected'));
-            // Add selected class to clicked item
-            this.classList.add('selected');
-            
-            customSelect.setAttribute('data-value', value);
-            selectSelected.classList.add('has-value');
-            selectSelected.innerHTML = `${this.textContent}<div class="dropdown-arrow">
-                <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>`;
-            selectItems.classList.add('select-hide');
-            dropdownArrow.style.transform = 'translateY(-50%)';
-        });
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function() {
-        selectItems.classList.add('select-hide');
-        selectSelected.classList.remove('active');
-        dropdownArrow.style.transform = 'translateY(-50%)';
-    });
-
-    // Set default date to today
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('start-date').value = today;
 });
 
-// Add button click handler
-document.querySelector('.compare-rates-btn').addEventListener('click', function() {
-    updateCalculations();
+// Add button click handlers
+document.querySelector('.compare-rates-btn').addEventListener('click', async function() {
+    await updateCalculations();
 });
 
-// Update the show amortization function
-const showAmortizationSchedule = () => {
-    const selectedValue = document.querySelector('.custom-select').getAttribute('data-value');
-    const principal = parseFloat(loanAmountInput.value.replace(/[^\d.]/g, '')) || 0;
-    const term = parseFloat(selectedValue) || 0;
-    const rate = parseFloat(interestRateInput.value) || 0;
-    const startDate = document.getElementById('start-date').value;
-
-    if (principal > 0 && term > 0 && rate > 0) {
-        const effectiveStartDate = startDate || new Date().toISOString().split('T')[0];
-        const schedule = calculateAmortizationSchedule(principal, rate, term, effectiveStartDate);
-        
-        // Update payoff date using last payment date
-        const payoffValue = document.querySelector('.payoff-value');
-        const lastPayment = schedule[schedule.length - 1];
-        payoffValue.textContent = formatPayoffDate(lastPayment.date);
-
-        const tableBody = document.getElementById('amortization-table-body');
-        tableBody.innerHTML = '';
-
-        // Update table header
-        document.querySelector('.amortization-table thead tr').innerHTML = `
-            <th>Payment Date</th>
-            <th>Payment</th>
-            <th>Principal</th>
-            <th>Interest</th>
-            <th>Balance</th>
-        `;
-
-        schedule.forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${formatDate(row.date)}</td>
-                <td>$${formatCurrency(row.payment)}</td>
-                <td>$${formatCurrency(row.principal)}</td>
-                <td>$${formatCurrency(row.interest)}</td>
-                <td>$${formatCurrency(row.balance)}</td>
-            `;
-            tableBody.appendChild(tr);
-        });
-
-        // Show the container
-        const container = document.querySelector('.amortization-section');
-        container.style.display = 'block';
-        container.querySelector('.details-content').classList.add('show');
-        container.scrollIntoView({ behavior: 'smooth' });
-    } else {
-        alert('Please calculate your loan payment first.');
-    }
-};
-
-// Remove old click handlers and update the link handler
-document.querySelector('.amortization-link').addEventListener('click', (e) => {
+document.querySelector('.amortization-link').addEventListener('click', async (e) => {
     e.preventDefault();
     const container = document.querySelector('.amortization-section');
     const link = e.currentTarget;
 
     if (container.style.display === 'none' || !container.style.display) {
-        showAmortizationSchedule();
+        await showAmortizationSchedule();
         link.textContent = 'Hide amortization schedule';
     } else {
         container.style.display = 'none';
@@ -378,6 +323,79 @@ document.querySelector('.amortization-link').addEventListener('click', (e) => {
         link.textContent = 'See amortization schedule';
     }
 });
+
+// Add print button handler
+document.querySelector('.print-button').addEventListener('click', () => {
+    window.print();
+});
+
+// Update the show amortization function
+const showAmortizationSchedule = async () => {
+    try {
+        const selectedValue = document.getElementById('loanTerm').value;
+        const principal = parseFloat(loanAmountInput.value.replace(/[^\d.]/g, '')) || 0;
+        const term = parseFloat(selectedValue) || 0;
+        const rate = parseFloat(interestRateInput.value) || 0;
+        const startDate = document.getElementById('start-date').value;
+
+        if (principal > 0 && term > 0 && rate > 0) {
+            const effectiveStartDate = startDate || new Date().toISOString().split('T')[0];
+            const schedule = calculateAmortizationSchedule(principal, rate, term, effectiveStartDate);
+            
+            // Update payoff date using last payment date
+            const payoffValue = document.querySelector('.payoff-value');
+            const lastPayment = schedule[schedule.length - 1];
+            payoffValue.textContent = formatPayoffDate(lastPayment.date);
+
+            // Update loan details
+            document.querySelector('.loan-amount-value').textContent = `$${formatCurrency(principal)}`;
+            document.querySelector('.loan-term-value').textContent = `${term} months`;
+            document.querySelector('.interest-rate-value').textContent = `${rate}%`;
+            document.querySelector('.start-date-value').textContent = formatDate(effectiveStartDate);
+
+            // Update payment summary values
+            document.querySelector('.payment-summary .payment-value').textContent = `$${formatCurrency(schedule[0].payment)}`;
+            document.querySelector('.payment-summary .principal-value').textContent = `$${formatCurrency(principal)}`;
+            const totalInterest = schedule.reduce((sum, payment) => sum + payment.interest, 0);
+            document.querySelector('.payment-summary .interest-value').textContent = `$${formatCurrency(totalInterest)}`;
+            document.querySelector('.payment-summary .total-paid-value').textContent = `$${formatCurrency(principal + totalInterest)}`;
+
+            const tableBody = document.getElementById('amortization-table-body');
+            tableBody.innerHTML = '';
+
+            // Update table header
+            document.querySelector('.amortization-table thead tr').innerHTML = `
+                <th>Payment Date</th>
+                <th>Payment</th>
+                <th>Principal</th>
+                <th>Interest</th>
+                <th>Balance</th>
+            `;
+
+            schedule.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${formatDate(row.date)}</td>
+                    <td>$${formatCurrency(row.payment)}</td>
+                    <td>$${formatCurrency(row.principal)}</td>
+                    <td>$${formatCurrency(row.interest)}</td>
+                    <td>$${formatCurrency(row.balance)}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            // Show the container
+            const container = document.querySelector('.amortization-section');
+            container.style.display = 'block';
+            container.querySelector('.details-content').classList.add('show');
+            container.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            alert('Please calculate your loan payment first.');
+        }
+    } catch (error) {
+        console.error('Error showing amortization schedule:', error);
+    }
+};
 
 // Add date formatting function
 const formatDate = (date) => {
@@ -389,16 +407,11 @@ const formatDate = (date) => {
 };
 
 // Add event listener for date changes to update payoff date
-document.getElementById('start-date').addEventListener('change', () => {
-    updateCalculations();
+document.getElementById('start-date').addEventListener('change', async () => {
+    await updateCalculations();
     // Keep existing amortization table update logic
     const container = document.querySelector('.amortization-section');
     if (container.style.display === 'block') {
-        showAmortizationSchedule();
+        await showAmortizationSchedule();
     }
-});
-
-// Add print button handler
-document.querySelector('.print-button').addEventListener('click', () => {
-    window.print();
 }); 
