@@ -10,6 +10,20 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader-overlay" id="preloader">
+        <div class="preloader-container">
+            <div class="logo-container">
+                <img src="car-wise-logo.svg" alt="Logo">
+            </div>
+            <div class="dot-loading">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
     <h1 class="main-title">What's Your <span class="highlight-text">Auto Loan Payment</span>?</h1>
     <p class="subtitle">Plan your car financing with confidence by understanding your monthly payments, total costs, and complete payment schedule.</p>
     <div class="calculator-wrapper">
@@ -20,48 +34,33 @@
                     <div class="input-group">
                         <label>
                             How much are you looking to borrow?
-                            <div class="tooltip-icon">
-                                i
-                                <div class="tooltip">Enter the total amount you wish to borrow for your vehicle.</div>
-                            </div>
+                            <button class="help-icon" data-tooltip="Enter the total amount you wish to borrow for your vehicle.">i</button>
                         </label>
                         <div class="input-wrapper">
                             <input type="text" id="loan-amount" placeholder="Enter amount">
                         </div>
                     </div>
 
-                    <div class="input-group">
-                        <label>
+                    <div class="form-group">
+                        <label for="loanTerm">
                             For how long?
-                            <div class="tooltip-icon">
-                                i
-                                <div class="tooltip">Enter the length of your loan term in months.</div>
-                            </div>
+                            <button class="help-icon" data-tooltip="Loan duration in months (36-84). Longer terms = lower payments but more interest.">i</button>
                         </label>
-                        <div class="input-wrapper term-wrapper">
-                            <div class="custom-select">
-                                <div class="select-selected">
-                                    Select term
-                                    <div class="dropdown-arrow">
-                                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-                                            <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="select-items select-hide">
-                                    <div data-value="">Select term</div>
-                                    <div data-value="36">36 months</div>
-                                    <div data-value="48">48 months</div>
-                                    <div data-value="60">60 months</div>
-                                    <div data-value="72">72 months</div>
-                                    <div data-value="84">84 months</div>
-                                </div>
-                            </div>
-                        </div>
+                        <select id="loanTerm">
+                            <option value="">Select term</option>
+                            <option value="36">36 months</option>
+                            <option value="48">48 months</option>
+                            <option value="60">60 months</option>
+                            <option value="72">72 months</option>
+                            <option value="84">84 months</option>
+                        </select>
                     </div>
 
                     <div class="input-group">
-                        <label>Interest rate</label>
+                        <label>
+                            Interest rate
+                            <button class="help-icon" data-tooltip="Enter your annual interest rate (APR).">i</button>
+                        </label>
                         <div class="input-wrapper">
                             <input type="text" id="interest-rate" placeholder="Enter rate">
                         </div>
@@ -70,10 +69,7 @@
                     <div class="input-group">
                         <label>
                             Start Date
-                            <div class="tooltip-icon">
-                                i
-                                <div class="tooltip">Enter when you want your loan to start.</div>
-                            </div>
+                            <button class="help-icon" data-tooltip="Enter when you want your loan payments to begin.">i</button>
                         </label>
                         <div class="input-wrapper">
                             <input type="date" id="start-date" class="date-input">
@@ -103,6 +99,10 @@
                             <span>Total Interest Paid</span>
                             <span class="value">--</span>
                         </div>
+                        <div class="detail-row">
+                            <span>Total Amount Paid</span>
+                            <span class="value total-amount">--</span>
+                        </div>
                     </div>
 
                     <button class="compare-rates-btn">Calculate Total</button>
@@ -119,12 +119,53 @@
     </div>
     <!-- Add defer to ensure DOM is loaded before script runs -->
     <script src="calculator.js" defer></script>
+    <!-- Add disclaimer -->
+    <p class="disclaimer">The monthly payments and total costs are estimates based on industry standard amortization models. Interest rates and loan terms may vary by lender and other factors.</p>
     <!-- Add this after calculator-container but initially hidden -->
     <div class="details-container amortization-section" style="display: none;">
         <div class="details-header">
             <div class="header-content">
                 <img src="car-wise-calculator-logo.svg" alt="CarWise Calculator" class="details-logo">
                 <h2>Amortization Schedule</h2>
+            </div>
+        </div>
+        <div class="payment-summary">
+            <div class="summary-section loan-details">
+                <div class="summary-row">
+                    <span class="label">Loan Amount:</span>
+                    <span class="value loan-amount-value">--</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">Loan Term:</span>
+                    <span class="value loan-term-value">--</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">Interest Rate:</span>
+                    <span class="value interest-rate-value">--</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">Start Date:</span>
+                    <span class="value start-date-value">--</span>
+                </div>
+            </div>
+            <div class="summary-divider"></div>
+            <div class="summary-section payment-details">
+                <div class="summary-row">
+                    <span class="label">Monthly Payment:</span>
+                    <span class="value payment-value">--</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">Total Principal:</span>
+                    <span class="value principal-value">--</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">Total Interest:</span>
+                    <span class="value interest-value">--</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">Total Amount Paid:</span>
+                    <span class="value total-paid-value">--</span>
+                </div>
             </div>
         </div>
         <div class="details-content">
