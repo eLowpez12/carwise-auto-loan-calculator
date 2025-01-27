@@ -302,6 +302,25 @@ document.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', function() {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('start-date').value = today;
+
+    // Format default values
+    const loanAmount = document.getElementById('loan-amount');
+    const interestRate = document.getElementById('interest-rate');
+
+    // Format loan amount
+    if (loanAmount.value) {
+        loanAmount.value = '$' + formatCurrency(loanAmount.value);
+    }
+
+    // Format interest rate
+    if (interestRate.value) {
+        interestRate.value = interestRate.value + '%';
+    }
+
+    // Trigger initial calculation
+    window.setTimeout(() => {
+        updateCalculations();
+    }, 100); // Small delay to ensure all formatting is complete
 });
 
 // Add button click handlers
