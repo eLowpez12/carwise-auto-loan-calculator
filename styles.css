@@ -643,18 +643,21 @@ body::before {
         display: block !important;
         break-inside: avoid;
         page-break-inside: avoid;
-        background-color: white;
+        background-color: white !important;
+        padding: 20px 28px;
     }
 
     /* Fix table formatting */
     .details-content {
         display: block !important;
+        background-color: white !important;
     }
 
     .amortization-table {
         display: table !important;
         width: 100% !important;
         border-collapse: collapse !important;
+        background-color: white !important;
     }
 
     .amortization-table thead {
@@ -663,11 +666,16 @@ body::before {
 
     .amortization-table tbody {
         display: table-row-group !important;
+        background-color: white !important;
     }
     
     .amortization-table tr {
         display: table-row !important;
         page-break-inside: avoid;
+    }
+
+    .amortization-table tr:nth-child(even) td {
+        background-color: #F9FAFB !important;
     }
     
     .amortization-table th,
@@ -675,6 +683,10 @@ body::before {
         display: table-cell !important;
         padding: 8px 32px !important;
         border-bottom: 1px solid #000 !important;
+    }
+
+    .summary-row {
+        line-height: 1.6;
     }
 
     /* Hide the print and CTA buttons in the schedule */
