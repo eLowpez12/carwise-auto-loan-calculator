@@ -994,19 +994,41 @@ body::before {
 @media (max-width: 768px) {
     .amortization-table th,
     .amortization-table td {
-        padding: 8px 12px;  /* Reduced horizontal padding */
-        font-size: 12px;    /* Slightly smaller text */
+        padding: 6px 8px;  /* Reduced padding */
+        font-size: 10px;   /* Smaller base font size */
     }
     
-    /* Ensure the date column doesn't get too squeezed */
+    /* Adjust header text */
+    .amortization-table th {
+        font-size: 10px;
+        font-weight: 600;
+        white-space: nowrap;  /* Prevent header text from wrapping */
+    }
+
+    /* Adjust the balance column to ensure numbers fit */
+    .amortization-table td:last-child {
+        font-size: 9px;  /* Slightly smaller for larger numbers */
+    }
+
+    /* Ensure table takes full width */
+    .amortization-table {
+        width: 100%;
+        table-layout: fixed;  /* This helps with consistent column widths */
+    }
+
+    /* Adjust column widths for better mobile display */
     .amortization-table th:first-child,
     .amortization-table td:first-child {
-        padding-left: 8px;
+        width: 20%;  /* Date column */
     }
-    
-    /* Give a bit more space to the payment column */
-    .amortization-table th:nth-child(2),
-    .amortization-table td:nth-child(2) {
-        padding-right: 16px;
+
+    .amortization-table th:not(:first-child):not(:last-child),
+    .amortization-table td:not(:first-child):not(:last-child) {
+        width: 18%;  /* Middle columns */
+    }
+
+    .amortization-table th:last-child,
+    .amortization-table td:last-child {
+        width: 26%;  /* Balance column - slightly wider for larger numbers */
     }
 } 
