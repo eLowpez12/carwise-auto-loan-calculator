@@ -1,0 +1,50 @@
+CarWise Auto Loan Calculator - Setup Instructions
+=================================================
+
+1. LOCAL SETUP (PC/Mac)
+-----------------------
+a) Extracting the Files:
+   - Locate the 'carwise-loan-calculator.zip' file
+   - Right-click and select 'Extract All' (Windows) or double-click (Mac)
+   - Choose a destination folder for the files
+
+b) Running the Calculator:
+   - Open the extracted folder
+   - Find and double-click 'index.html'
+   - The calculator will open in your default web browser
+   - That's it! The calculator is ready to use
+
+2. WEBFLOW INTEGRATION
+---------------------
+Option 1: Embed as Custom Code
+-----------------------------
+1. In Webflow:
+   - Create a new section/container where you want the calculator
+   - Add an 'Embed' element
+   - Open the Embed settings
+
+2. Copy these files into your Webflow project:
+   - styles.css → Site settings → Custom code (Head)
+   - calculator.js → Site settings → Custom code (Footer)
+
+3. Copy the HTML:
+   - Copy the contents of index.html (excluding <head> and <script> tags)
+   - Paste into the Embed element
+
+4. Add SVG files:
+   - Upload all .svg files to Webflow's Assets
+   - Update image paths in the HTML to match your asset URLs
+
+Option 2: Hosted Integration
+---------------------------
+1. Host the calculator on your web server:
+   - Upload all files to your web hosting
+   - Note the URL where index.html is accessible
+
+2. In Webflow:
+   - Add an iFrame element where you want the calculator
+   - Set the iFrame source to your hosted calculator URL
+   - Adjust iFrame size as needed (recommended: 100% width, 800px height)
+
+
+Last Updated: January 2025 

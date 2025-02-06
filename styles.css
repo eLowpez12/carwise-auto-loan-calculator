@@ -241,6 +241,24 @@ body::before {
     }
 }
 
+@media (max-width: 768px) {
+    .tooltip {
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 100%;
+        min-width: 150px;
+        /* Ensure tooltip stays within screen bounds */
+        max-width: 90vw;
+        width: auto;
+    }
+    
+    /* Adjust the arrow position for centered tooltip */
+    .tooltip::before {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
 /* Results Section */
 .results-section {
     text-align: center;
@@ -437,30 +455,27 @@ body::before {
     padding: 24px 32px;
     border-bottom: 1px solid #E5E7EB;
     background-color: white;
+    text-align: center;
 }
 
-.header-content {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;  /* Center the content */
-    gap: 24px;
-    position: relative;  /* For absolute positioning of logo */
+.logo-container {
+    margin-bottom: 16px;
 }
 
-.details-logo {
-    position: absolute;  /* Take logo out of flow */
-    left: 0;            /* Align to left edge */
-    height: 32px;
-    width: auto;
+.logo {
+    max-width: 200px;
+    height: auto;
 }
 
-.details-header h2 {
+.title-container {
+    margin-bottom: 8px;
+}
+
+.amortization-title {
     font-size: 20px;
     font-weight: 500;
     color: #111827;
     margin: 0;
-    /* Title will be centered in remaining space */
 }
 
 /* Update table styles */
@@ -471,7 +486,7 @@ body::before {
 
 .amortization-table th,
 .amortization-table td {
-    padding: 8px 16px;
+    padding: 8px 32px;
     text-align: right;
     border-bottom: 1px solid #E5E7EB;
 }
@@ -955,4 +970,43 @@ body::before {
 .summary-row .value {
     font-weight: 600;
     color: #E31837;
+}
+
+/* Add or modify the logo styling */
+.logo {
+    max-width: 200px;  /* Adjust as needed */
+    margin-bottom: 20px;  /* Add space below the logo */
+    display: block;  /* Ensures logo takes its own line */
+}
+
+/* Adjust the title styling */
+.amortization-title {
+    clear: both;  /* Ensures title starts below the logo */
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* Remove any conflicting styles */
+.header-content {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .amortization-table th,
+    .amortization-table td {
+        padding: 8px 12px;  /* Reduced horizontal padding */
+        font-size: 12px;    /* Slightly smaller text */
+    }
+    
+    /* Ensure the date column doesn't get too squeezed */
+    .amortization-table th:first-child,
+    .amortization-table td:first-child {
+        padding-left: 8px;
+    }
+    
+    /* Give a bit more space to the payment column */
+    .amortization-table th:nth-child(2),
+    .amortization-table td:nth-child(2) {
+        padding-right: 16px;
+    }
 } 

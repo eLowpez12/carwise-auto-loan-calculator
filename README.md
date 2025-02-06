@@ -15,15 +15,20 @@ A modern, user-friendly auto loan calculator that helps users understand their c
 
 ### Prerequisites
 - Modern web browser (Chrome, Firefox, Safari, Edge)
-- Web server for hosting
+- Web server for hosting (only needed for Webflow integration)
 
 ### Installation
-1. Clone the repository:
-```bash
-git clone https://github.com/your-username/carwise-loan-calculator.git
-```
-2. Place files on your web server
-3. Open index.html in a browser
+1. Local Setup:
+   - Locate the 'carwise-loan-calculator.zip' file
+   - Extract the contents to your desired location
+   - Open index.html in your browser to start using the calculator
+
+2. For Webflow Integration:
+   Follow the detailed setup instructions in `INSTRUCTIONS.txt` for:
+   - Custom code embedding
+   - Hosted integration options
+   - Asset management
+   - Troubleshooting steps
 
 ### Files Structure
 - `index.html` - Main HTML structure
@@ -62,8 +67,6 @@ git clone https://github.com/your-username/carwise-loan-calculator.git
 - CarWise brand colors
 - Print-optimized styles
 
-## License
-Proprietary - All rights reserved
 
 ## Support
 For support, please contact CarWise directly through [carwisela.com/contact](https://www.carwisela.com/contact) 
