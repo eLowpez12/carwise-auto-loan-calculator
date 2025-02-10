@@ -487,7 +487,7 @@ body::before {
 .amortization-table th,
 .amortization-table td {
     padding: 8px 32px;
-    text-align: right;
+    text-align: center;
     border-bottom: 1px solid #E5E7EB;
 }
 
@@ -502,7 +502,7 @@ body::before {
 
 .amortization-table th:not(:first-child),
 .amortization-table td:not(:first-child) {
-    text-align: right;
+    text-align: center;
 }
 
 .amortization-table td {
@@ -529,7 +529,7 @@ body::before {
 /* Update alignment for each column */
 .amortization-table th,
 .amortization-table td {
-    text-align: right;  /* Default right alignment */
+    text-align: center;  /* Default center alignment */
 }
 
 .amortization-table th:first-child,
