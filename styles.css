@@ -1031,4 +1031,18 @@ body::before {
     .amortization-table td:last-child {
         width: 26%;  /* Balance column - slightly wider for larger numbers */
     }
+}
+
+.amortization-table th[data-short-label] {
+    position: relative;
+}
+
+@media (max-width: 380px) {  /* iPhone Pro size */
+    .amortization-table th[data-short-label]::before {
+        content: attr(data-short-label);
+    }
+    
+    .amortization-table th[data-short-label] > span {
+        display: none;
+    }
 } 

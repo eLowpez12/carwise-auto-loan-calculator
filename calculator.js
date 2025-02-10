@@ -384,7 +384,7 @@ const showAmortizationSchedule = async () => {
 
             // Update table header
             document.querySelector('.amortization-table thead tr').innerHTML = `
-                <th>Payment Date</th>
+                <th data-short-label="Pmt Date"><span>Payment Date</span></th>
                 <th>Payment</th>
                 <th>Principal</th>
                 <th>Interest</th>
