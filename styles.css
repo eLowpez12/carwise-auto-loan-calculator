@@ -1037,7 +1037,7 @@ body::before {
     position: relative;
 }
 
-@media (max-width: 380px) {  /* iPhone Pro size */
+@media (max-width: 420px) {  /* Changed from 380px to 420px */
     .amortization-table th[data-short-label]::before {
         content: attr(data-short-label);
     }
